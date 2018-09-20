@@ -41,7 +41,7 @@ HIPFLAGS=-L$(HIP_PATH)/lib/ -lhip_hcc
 HIPCFLAGS=$(shell $(HIP_PATH)/bin/hipconfig --cpp_config)
 
 # Description of binaries
-BINDIR=../bin
+BINDIR=.
 JACOBI_HIP_NORMAL_MPI=$(BINDIR)/jacobi_hip_normal_mpi
 JACOBI_HIP_AWARE_MPI=$(BINDIR)/jacobi_hip_aware_mpi
 BINARIES=$(JACOBI_HIP_NORMAL_MPI) $(JACOBI_HIP_AWARE_MPI)
@@ -68,11 +68,9 @@ hip_aware_mpi.o: Jacobi.h HIP_Aware_MPI.c
 	$(MPICC) $(MPICFLAGS) $(CFLAGS) $(HIPCFLAGS) -c HIP_Aware_MPI.c -o hip_aware_mpi.o
 
 $(JACOBI_HIP_NORMAL_MPI): jacobi.o input.o host.o device.o hip_normal_mpi.o
-	mkdir -p $(BINDIR)
 	$(MPILD) $(MPICFLAGS) -o $(JACOBI_HIP_NORMAL_MPI)  jacobi.o input.o host.o device.o  hip_normal_mpi.o $(MPILDFLAGS)
 
 $(JACOBI_HIP_AWARE_MPI): jacobi.o input.o host.o device.o hip_aware_mpi.o
-	mkdir -p $(BINDIR)
 	$(MPILD) $(MPICFLAGS) -o $(JACOBI_HIP_AWARE_MPI) jacobi.o input.o host.o device.o hip_aware_mpi.o $(MPILDFLAGS)
 
 clean:
